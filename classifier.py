@@ -3,6 +3,8 @@ import ollama
 import system_message
 import json
 
+ollama.client.host = 'http://ollama_server:11434'
+
 app = Flask(__name__)
 
 # Function to classify prompt into a category using Llama 3.2
