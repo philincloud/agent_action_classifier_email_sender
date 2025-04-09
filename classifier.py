@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
-import ollama
+from ollama import Client
 import system_message
 import json
 
-ollama.client.host = 'http://ollama_server:11434'
+# Initialize the Ollama client, connecting to the 'ollama_server' container
+ollama_client = Client(host='http://ollama_server:11434')
+
+
 
 app = Flask(__name__)
 
@@ -21,7 +24,7 @@ def classify_prompt(prompt):
     ]
 
     # Call Llama 3.2 via ollama (adjust model name if needed, e.g., "llama3.2:8b")
-    response = ollama.chat(model="llama3.2", messages=messages)
+    response = ollama_client.chat(model="llama3.2", messages=messages)
 
     # Extract and return the single-word response
     print(response)
