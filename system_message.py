@@ -20,8 +20,8 @@ def system_message(addresses, actions):
         f"'{', '.join(addresses)}' " +
         "and single action from this list: " +
         f"'{', '.join(actions)}'. " +
-        "Given a user prompt, please retrieve 4 informations from it: action and address from the list that best matches the prompt's meaning, also full message_text and message subject. If you can not see subject assign just 'message to {assigned address}'. If language is diffrent than english return 'unknow language'. Keep message unchanged but  cut of sentence including address " +
-        "Please return response as JSON according to this format: " +
+        "Given a user prompt, please retrieve 4 informations from it: action and address from the list that best matches the prompt's meaning. Keep content unchanged and pass it exactly to  {message_text}. Try to assign the  message subject but if you can not see subject assign just 'message to {assigned address}'. " +
+        "Please return response as JSON according to this format: " + 
         '{"action": "{assigned action}","subject":"{assigned subject}", "address": "{assigned address}", "message_text": "{assigned message_text}"} ' +
         "Do not explain, just return the JSON. Here is an example of the prompt and expected output: " +
         "prompt: 'I want to send email to Daniel and the content is: Daniel. We need a report for tomorrow morning about last month transactions. Could you prepare it please? Thank you, With Regards, Philip.' " +
