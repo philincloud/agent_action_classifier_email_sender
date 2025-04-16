@@ -1,0 +1,10 @@
+FROM python:3.12-slim-bullseye
+WORKDIR /app
+COPY requirements.audio.txt .
+RUN pip install -r requirements.audio.txt
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["python", "audio_server.py"]

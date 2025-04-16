@@ -3,47 +3,50 @@ version: '3.8'
 services:
   agent_classifier_app:
     build:
-      context: ./your_app_directory # Adjust if your app files are in a subdirectory
+      context: .
       dockerfile: Dockerfile.app
     container_name: agent_classifier_app
-    expose:
-      - "9000"
+    #ports:
+    #  - "9000:9000"  # Expose the port Waitress is running on
     volumes:
       - shared_data:/app/shared_data
     networks:
       - my_network
-
-  waitress_server:
-    build:
-      context: . # Assuming waitress_proxy.py and Dockerfile.waitress are in the same directory as docker-compose.yml
-      dockerfile: Dockerfile.waitress
-    container_name: waitress_server
-    ports:
-      - "80:8080"
-    environment:
-      - FLASK_APP_HOST=agent_classifier_app
-      - FLASK_APP_PORT=9000
-    volumes:
-      - ./waitress_proxy.py:/app/waitress_proxy.py # Mount the proxy script
     depends_on:
-      - agent_classifier_app
-    networks:
-      - my_network
+      - ollama_server
 
+ 
   ollama_server:
-    image: ollama/ollama
+    build:
+      context: .
+      dockerfile: Dockerfile.ollama.llama3.2
     mem_limit: 8g
-    ports:
-      - "11434:11434"
+    ports: [] 
+    environment:
+      OLLAMA_HOST: "0.0.0.0:11434"
     volumes:
       - ollama_data:/root/.ollama
       - shared_data:/shared_data
     networks:
       - my_network
+    entrypoint: [ "/bin/bash", "/entrypoint.sh" ]
+
+  audio_server:
+    build:
+      context: .
+      dockerfile: Dockerfile.audio_server
+    container_name: audio_server
+    ports:
+      - "80:8000"  
+    networks:
+      - my_network
+    depends_on:
+      - agent_classifier_app
 
 volumes:
   shared_data:
   ollama_data:
+
 
 networks:
   my_network:
